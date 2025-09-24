@@ -5,7 +5,7 @@ on:
     branches: [ main ]  
 env:
   IMAGE_NAME: telegram-genai-bot
-  ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+  ACR_LOGIN_SERVER: devopsinsignia.azurecr.io
 
 jobs:
   build-and-deploy:
@@ -18,7 +18,7 @@ jobs:
       - name: Login to ACR
         uses: azure/docker-login@v1
         with:
-          login-server: devopsinsignia.azurecr.io
+          login-server: ${ACR_LOGIN_SERVER}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
