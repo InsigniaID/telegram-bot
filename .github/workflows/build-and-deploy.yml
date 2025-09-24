@@ -3,9 +3,6 @@ name: Build & Deploy Telegram Bot
 on:
   push:
     branches: [ main ]  
-env:
-  IMAGE_NAME: telegram-genai-bot
-  ACR_LOGIN_SERVER: devopsinsignia.azurecr.io
 
 jobs:
   build-and-deploy:
@@ -18,15 +15,14 @@ jobs:
       - name: Login to ACR
         uses: azure/docker-login@v1
         with:
-          login-server: ${env.ACR_LOGIN_SERVER}
+          login-server: devopsinsignia.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build & Push Image
         run: |
-          IMAGE="${env.ACR_LOGIN_SERVER}/${env.IMAGE_NAME}"
-          docker build -t "$IMAGE:latest" .
-          docker push "$IMAGE:latest"
+          docker build -t devopsinsignia.azurecr.io/telegram-genai-bot:latest .
+          docker push devopsinsignia.azurecr.io/telegram-genai-bot:latest
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.3
