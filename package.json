@@ -1,0 +1,25 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachary-insignia/telegram-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zachary-insignia/telegram-bot/issues"
+  },
+  "homepage": "https://github.com/zachary-insignia/telegram-bot#readme",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "ky": "^1.10.0",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}

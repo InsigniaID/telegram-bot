@@ -1,0 +1,54 @@
+name: Build & Deploy Telegram Bot
+
+on:
+  push:
+    branches: [ main ]  
+env:
+  IMAGE_NAME: telegram-genai-bot
+  ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: devopsinsignia.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build & Push Image
+        run: |
+          IMAGE="${ACR_LOGIN_SERVER}/${IMAGE_NAME}"
+          docker build -t "$IMAGE:latest" .
+          docker push "$IMAGE:latest"
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 109.123.234.206
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            set -e
+            echo "Starting deployment..."
+            cd /root/telegram-genai-bot
+
+            echo "Pulling latest image..."
+            docker compose pull
+
+            echo "Recreating container..."
+            docker compose up -d --force-recreate
+
+            echo "Cleaning up old images..."
+            docker image prune -f
+
+            echo "Checking container status..."
+            docker ps | grep telegram-genai-bot
+
+            echo "Deployment completed successfully!"

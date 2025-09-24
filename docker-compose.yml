@@ -1,0 +1,10 @@
+services:
+  bot:
+    image: devopsinsignia.azurecr.io/telegram-genai-bot:latest
+    container_name: telegram-genai-bot
+    restart: unless-stopped
+    env_file:
+      - .env  
+    volumes:
+      - .:/app
+      - /app/node_modules
